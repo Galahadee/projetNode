@@ -4,13 +4,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import MongoStore from 'connect-mongo';
 import route from './routes/routes.js';
+import session from 'express-session';
+import mongoose from 'mongoose';
 
 // ==========
 // App initialization
 // ==========
 
 dotenv.config();
-const { APP_HOSTNAME, APP_PORT, SESSION_SECRET, NODE_ENV } = process.env;
+const { APP_HOSTNAME, APP_PORT, SESSION_SECRET, NODE_ENV,MONGO_STRING,MONGO_DB_NAME } = process.env;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
