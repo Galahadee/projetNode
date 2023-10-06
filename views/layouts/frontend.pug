@@ -24,9 +24,4 @@ html(lang='en')
       .alert.alert-error
       each message in flash_error
         +message('error') #{message}
-    if flash_info 
-      .alert.alert-info 
-      each message in flash_info 
-       +message('info') #{message}
-
     block content

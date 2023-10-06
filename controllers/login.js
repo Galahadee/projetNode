@@ -8,7 +8,7 @@ export function LoginController(req, res) {
 export async function PostLoginController(req, res) {
     try {
         const password = req.body.password, email = req.body.email;
-
+        
         if (!password || !email) {
             req.flash('error', 'Tous les champs sont obligatoires !');
             res.redirect(`login`)
@@ -48,7 +48,6 @@ export function LogoutController(req, res) {
             res.status(500).send(`<h1>Erreur !</h1><p>${err.message}</p>`)
             return
         }
-        req.flash('info', 'Vous avez été déconnecté.');
         res.redirect('login')
     })
 }
