@@ -1,4 +1,5 @@
 .ui.inverted.menu
+  .right.menu
     if user == null
       a.item(href='/register' class='active')
         i.sign-in.icon
@@ -12,7 +13,7 @@
         | Dashboard
       span.item
         i.user.icon
-        | #{user.firstName} #{user.lastName}
+        | #{user.email} #{user.firstName} #{user.lastName}
       a.item(href='/logout')
         i.sign-out.icon
         | Déconnexion
