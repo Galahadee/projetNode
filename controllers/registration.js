@@ -1,7 +1,8 @@
 
 import { validate as validateEmail } from 'email-validator'
 import UsersModel from '../models/Users.js'
-
+import argon2 from "argon2";
+import flash from "connect-flash";
 
 export function RegisterController(req, res) {
     res.render('register')
@@ -9,42 +10,55 @@ export function RegisterController(req, res) {
 
 export async function PostRegisterController(req, res) {
     try {
-        const password = req.body.password, confPassword = req.body.password_confirm;
-        const email = req.body.email,emailValidated = validateEmail(email),emailUser = await UsersModel.find({"email":email});
-        console.log(emailUser.length)
-        if (!emailValidated) {
-            res.status(400).send('<h1>Erreur - Email invalide</h1>')
+        const password = req.body.password, confPassword = req.body.password_confirm, lastName = req.body.lastName, firstName = req.body.firstName,
+            email = req.body.email;
+
+
+        if (!password || !confPassword || !email || !firstName || !lastName) {
+
+            req.flash('error', 'Tous les champs sont obligatoires !');
+            res.redirect('register')
             return
         }
-        if (emailUser.length>0) {
-            res.status(400).send('<h1>Erreur - Email déjà utilisé</h1>')
+
+        const emailUser = await UsersModel.findOne({ "email": email }), emailValidated = validateEmail(email);
+
+        if (!emailValidated) {
+
+            req.flash('error', 'Email invalide !');
+            res.redirect('register')
+            return
+        }
+
+        if (emailUser) {
+            req.flash('error', 'Email déjà utilisé!');
+            res.redirect('register')
             return
         }
 
         if (password !== confPassword) {
-            res.status(400).send('<h1>Erreur - Les champs mots de passe ne sont pas identiques</h1>')
+            req.flash('error', 'Les champs mots de passe ne sont pas identiques!');
+            res.redirect('register')
             return
         }
 
         try {
+            const hashPass = await argon2.hash(password);
             const newUser = {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
+                firstName: firstName,
+                lastName: lastName,
                 email: email,
-                password: password
-            }
+                password: hashPass
+            };
 
-            const doc = await UsersModel.create(newUser);
-            req.session.user={
-                email:email
-            }
-            console.log(doc)
-            res.redirect('dashboard')
+            await UsersModel.create(newUser);
+            req.flash('success', 'Vous êtes bien enregistré !');
+            res.redirect('login')
         } catch (err) {
             console.error('Erreur d\'insertion', err.message);
         }
     } catch (err) {
-        console.error('Erreur d\'insertion', err.message);
+        console.error('Erreur Inscription', err.message);
 
     }
 }
