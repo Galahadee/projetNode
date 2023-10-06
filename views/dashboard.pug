@@ -9,3 +9,17 @@ block content
   .ui.middle.aligned.center.aligned.grid
     .sixteen.wide.ten.wide.tablet.seven.wide.computer.column
       h1 Bonjour #{user.firstName} #{user.lastName} !
+
+
+          .sixteen.wide.ten.wide.tablet.seven.wide.computer.column
+      h1 Modifier informations
+
+      form.ui.large.form(method="post" action="/modify")
+        .ui.segment
+          +field('text', 'firstName', user.firstName)
+          +field('text', 'lastName', user.lastName) 
+          +field('email', 'email', user.email)
+          +field('password', 'password', 'Password')
+          +field('password', 'password_confirm', 'Confirm password')
+          button(type="submit").ui.fluid.large.teal.submit.button
+            | Register

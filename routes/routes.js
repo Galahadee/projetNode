@@ -4,6 +4,8 @@ import { LoginController, LogoutController, PostLoginController } from '../contr
 import DashBoardController from '../controllers/dashboard.js'
 import { authGuard, setTemplateVars } from '../middlewares/session.js';
 import {RegisterController,PostRegisterController} from '../controllers/registration.js'
+import modifController from '../controllers/modify.js';
+
 const appRouter = Router()
 
 appRouter.use(setTemplateVars)
@@ -15,5 +17,6 @@ appRouter.get('/logout', authGuard, LogoutController);
 appRouter.get('/dashboard',authGuard, DashBoardController);
 appRouter.get('/register',RegisterController)
 appRouter.post('/register',PostRegisterController)
+appRouter.post('/modify',authGuard,modifController)
 
 export default appRouter;
