@@ -15,9 +15,18 @@ html(lang='en')
 
     include ../includes/menu
 
-    +message('success') Success message example
-    +message('error') Error message example
-    +message('info') Info message example
-    +message('warning') Warning message example
+
+    if flash_success
+      .alert.alert-success
+      each message in flash_success
+        +message('success') #{message}
+    if flash_error
+      .alert.alert-error
+      each message in flash_error
+        +message('error') #{message}
+    if flash_info 
+      .alert.alert-info 
+      each message in flash_info 
+       +message('info') #{message}
 
     block content

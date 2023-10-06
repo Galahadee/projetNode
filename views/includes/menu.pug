@@ -1,21 +1,18 @@
-//- Top black menu bar
 .ui.inverted.menu
-  .left.menu
-    a.item(href='/dashboard')
-      i.home.icon
-      | Dashboard
-
-  .right.menu
-    a.item(href='/register' class='active')
-      i.sign-in.icon
-      | Inscription
-    a.item(href='/login')
-      i.sign-in.icon
-      | Connexion
-
-    span.item
-      i.user.icon
-      | John Doe
-    a.item(href='/logout')
-      i.sign-out.icon
-      | Déconnexion
+    if user == null
+      a.item(href='/register' class='active')
+        i.sign-in.icon
+        | Inscription
+      a.item(href='/login')
+       i.sign-in.icon
+        | Connexion
+    if user !== null
+      a.item(href='/dashboard')
+        i.home.icon
+        | Dashboard
+      span.item
+        i.user.icon
+        | #{user.firstName} #{user.lastName}
+      a.item(href='/logout')
+        i.sign-out.icon
+        | Déconnexion
