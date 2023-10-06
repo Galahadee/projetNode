@@ -5,7 +5,7 @@ export function setTemplateVars(req, res, next) {
   
   export function authGuard(req, res, next) {
     if (!req.session?.user) {
-      res.redirect('/login')
+      res.redirect('login')
       return
     }
     next()

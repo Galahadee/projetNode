@@ -6,6 +6,7 @@ import MongoStore from 'connect-mongo';
 import route from './routes/routes.js';
 import session from 'express-session';
 import mongoose from 'mongoose';
+import flash from "connect-flash";
 
 // ==========
 // App initialization
@@ -25,6 +26,7 @@ app.locals.pretty = NODE_ENV !== 'production'; // Indente correctement le HTML e
 // ==========
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({extended:false}));
 app.use(session({
   name: 'NODEPROJECT_SESSION',
   secret: SESSION_SECRET,
@@ -32,6 +34,13 @@ app.use(session({
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: `${MONGO_STRING}${MONGO_DB_NAME}` })
 }));
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.flash_success = req.flash("success");
+  res.locals.flash_error=req.flash("error");
+  next();
+});
+
 
 // ==========
 // App routers
@@ -49,7 +58,6 @@ try {
 catch (err) {
   console.error('Erreur de connexion', err.message)
 }
-
 
 app.listen(APP_PORT, () => {
   console.log(`App listening at http://${APP_HOSTNAME}:${APP_PORT}`);
